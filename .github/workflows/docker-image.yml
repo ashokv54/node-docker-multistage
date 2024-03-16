@@ -16,6 +16,17 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: 🛠️ Build the Docker image
-      run: docker build . --file Dockerfile --tag firstimage:$(date +%s)
-    - name: scan the image for 🚨 Critical 🚨 Vulnerabilities
-      run: docker run --rm -v /var/run/docker.sock:/var/run/docker.sock  aquasec/trivy --severity CRITICAL image firstimage:$(date +%s) --exit-code 1
+      run: docker build . --file Dockerfile --tag docker.io/ashokvdeveloper/my-app:$(date +%s)
+      
+    - name: 📄 list docker images
+      run: docker images
+      
+    - name: 🕵️‍♂️ Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'docker.io/ashokvdeveloper/my-app:$(date +%s)'
+        format: 'table'
+        exit-code: '1'
+        ignore-unfixed: true
+        vuln-type: 'os,library'
+        severity: 'CRITICAL,HIGH'
