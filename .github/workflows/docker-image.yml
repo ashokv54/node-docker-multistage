@@ -24,7 +24,7 @@ jobs:
     - name: 🕵️‍♂️ Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
       with:
-        image-ref: 'nginx'
+        image-ref: 'docker.io/ashokvdeveloper/my-app'
         format: 'table'
         exit-code: '1'
         ignore-unfixed: true
