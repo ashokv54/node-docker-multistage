@@ -1,0 +1,21 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: 🛠️ Build the Docker image
+      run: docker build . --file Dockerfile --tag firstimage:$(date +%s)
+    - name: scan the image for 🚨 Critical 🚨 Vulnerabilities
+      run: docker run --rm -v /var/run/docker.sock:/var/run/docker.sock  aquasec/trivy --severity CRITICAL image firstimage:$(date +%s) --exit-code 1
